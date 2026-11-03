@@ -4,10 +4,19 @@
   "private": true,
   "description": "Bukidnon infrastructure projects map and table, sourced from Bisto.ph / BetterGov DPWH API",
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "sync": "node scripts/sync.mjs",
-    "serve": "npx --yes http-server -p 8080 -c-1 ."
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && wrangler dev",
+    "serve": "python -m http.server 8080",
+    "deploy:dry": "npm run build && wrangler deploy --dry-run",
+    "deploy": "npm run build && wrangler deploy"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^4.157.0"
+  }
 }

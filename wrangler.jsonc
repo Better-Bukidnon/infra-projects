@@ -1,0 +1,21 @@
+{
+  // Cloudflare Workers static-assets deploy. `npm run build` writes the site to dist/.
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "bukidnon-infra-projects",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // Required by `npx wrangler preview`, which Workers Builds runs for non-production branches
+  "previews": {},
+  // Until a custom domain is chosen, the site is served on *.workers.dev.
+  // To add one (e.g. a betterbukidnon.org subdomain), set it here rather than in the dashboard:
+  // "routes": [{ "pattern": "infra.example.org", "custom_domain": true }],
+  "workers_dev": true,
+  "preview_urls": true
+}

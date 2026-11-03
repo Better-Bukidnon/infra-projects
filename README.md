@@ -16,7 +16,7 @@ api.dpwh.bettergov.ph  ──(daily sync)──▶  data/projects.json  ──�
 
 ```sh
 npm run sync    # refresh data/projects.json
-npm run serve   # http://localhost:8080   (or: python -m http.server 8080)
+npm run serve   # http://localhost:8080 (python -m http.server)
 ```
 
 ## What the sync cleans up
@@ -42,3 +42,20 @@ npm run serve   # http://localhost:8080   (or: python -m http.server 8080)
 ## Data attribution
 
 Project data comes from DPWH through [BetterGov.ph](https://bettergov.ph) / [Bisto.ph](https://bisto.ph). Map tiles are © OpenStreetMap contributors.
+
+## Deploy (Cloudflare Workers)
+
+`wrangler.jsonc` serves `dist/` as Workers static assets, the same setup as betterbukidnon. There's no Worker script.
+
+```sh
+npm install           # installs wrangler (pinned)
+npm run dev           # build + wrangler dev on http://localhost:8787
+npm run deploy:dry    # build + validate without uploading
+npm run deploy        # build + deploy (needs `npx wrangler login`)
+```
+
+`scripts/build.mjs` copies only `index.html`, `assets/` and `data/` into `dist/` and writes `_headers` (data revalidates on every load). Until a custom domain is added under `routes`, the site is served on `*.workers.dev`.
+
+## Claude Code
+
+`CLAUDE.md` has the project rules. Project skills are in `.claude/skills/`: `sync-projects`, `audit-data` and `deploy`. Subagents copied from betterbukidnon are in `.claude/agents/` (MIT, see `THIRD_PARTY_NOTICE.txt`).

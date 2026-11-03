@@ -35,11 +35,12 @@ const LGU_PATTERNS = LGUS.map((name) => {
 // The API mixes clean categories with raw strings ("GAA 2025 SSP",
 // "Roads: Construction - PCCP", ...). Collapse them into a short list.
 const CATEGORIES = [
-  ['Flood Control and Drainage', /flood|drainage|slope protection|revetment|dike/i],
+  ['Flood Control and Drainage', /flood|drainage|culvert|slope protection|revetment|dike/i],
   ['Bridges', /bridge/i],
-  ['Roads', /road|pavement|pccp|asphalt|highway|by-pass|bypass/i],
+  // "RD." / "FMR" (farm-to-market road) / "concreting of <place> to <place>"
+  ['Roads', /road|\brd\b|\bfmr\b|carriage|concreting|pavement|pccp|asphalt|highway|by-pass|bypass/i],
   ['Water Provision and Storage', /water|sanitation|septage|irrigation/i],
-  ['Buildings and Facilities', /building|facilit|classroom|school|court|gym|hall|center|centre|hospital|office/i],
+  ['Buildings and Facilities', /building|\bbldgs?\b|\brhu\b|health unit|facilit|classroom|school|court|gym|hall|center|centre|hospital|office/i],
 ];
 
 function normalizeCategory(raw, description) {
