@@ -17,7 +17,7 @@ npm run serve         # plain static server on :8080, no build step
 ## Check before deploying
 
 1. If the data is stale, run the `sync-projects` skill first.
-2. `npm run deploy:dry`. It should read 4 files from `dist/` (index.html, app.js, styles.css, projects.json) and report "No bindings found".
+2. `npm run deploy:dry`. It should read the files from `dist/` (index.html, assets, projects.json) and report "No bindings found".
 3. `npm run dev`, then open http://localhost:8787. Confirm the map renders, the summary shows the project count, and the browser console has no errors.
 
 ## Deploy

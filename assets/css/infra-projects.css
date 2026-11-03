@@ -1,0 +1,367 @@
+/*
+ * Infrastructure Projects page.
+ * Builds on the shared BetterBukidnon design (assets/css/style.css). Use its
+ * tokens (--color-*, --spacing-*, --border-radius, --shadow-*) and components
+ * (.btn, .section, .page-header, .container). Every class here starts with
+ * `ip-` so nothing collides with style.css when this page moves into the main repo.
+ */
+
+:root {
+  /* Status colors, derived from the shared palette */
+  --ip-completed: var(--color-success, #06a77d);
+  --ip-ongoing: var(--color-accent, #f77f00);
+  --ip-procurement: var(--color-info, #0077be);
+  --ip-terminated: var(--color-danger, #d62828);
+  --ip-other: var(--color-text-light, #666666);
+  --ip-border: rgba(0, 0, 0, 0.08);
+}
+
+.ip-section {
+  padding-top: var(--spacing-lg);
+}
+
+/* ---------- toolbar ---------- */
+
+.ip-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ip-view-toggle {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-white);
+  border: 1px solid var(--ip-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.ip-view-toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.ip-view-toggle button[aria-selected='true'] {
+  color: var(--color-white);
+  background: var(--color-primary);
+}
+
+.ip-summary {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+.ip-summary strong {
+  color: var(--color-text);
+}
+
+/* ---------- layout ---------- */
+
+.ip-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+/* ---------- filters ---------- */
+
+.ip-filters {
+  position: sticky;
+  top: 88px; /* clears the sticky .site-header */
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-white);
+  border: 1px solid var(--ip-border);
+  border-radius: 10px;
+}
+.ip-filter {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.ip-filter > label,
+.ip-filter > legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+.ip-filter input[type='search'],
+.ip-filter select {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: var(--border-radius);
+}
+.ip-filter input:focus-visible,
+.ip-filter select:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.ip-status-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.ip-status-opt input {
+  accent-color: var(--color-primary);
+}
+.ip-status-opt .ip-count {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: var(--color-text-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.ip-filters .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ip-filters .btn-primary:hover {
+  transform: none;
+}
+
+/* ---------- results ---------- */
+
+.ip-panel {
+  overflow: hidden;
+  background: var(--color-white);
+  border: 1px solid var(--ip-border);
+  border-radius: 10px;
+}
+
+#map {
+  height: 640px;
+  /* Keep Leaflet's z-indexes (up to 1000) below the sticky site header */
+  isolation: isolate;
+  z-index: 0;
+}
+
+.ip-table-wrap {
+  overflow-x: auto;
+}
+.ip-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.ip-table th {
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  background: var(--color-bg-alt);
+  border-bottom: 1px solid var(--ip-border);
+}
+.ip-table td {
+  padding: 12px 14px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--ip-border);
+}
+.ip-table tr:last-child td {
+  border-bottom: 0;
+}
+.ip-num {
+  text-align: right !important;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ip-title {
+  max-width: 420px;
+  font-weight: 600;
+}
+.ip-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-light);
+}
+
+.ip-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--c);
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  border-radius: 999px;
+}
+
+.ip-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  border-top: 1px solid var(--ip-border);
+}
+.ip-pager button {
+  min-width: 36px;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.ip-pager button[aria-current='page'] {
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.ip-pager button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.ip-pager span {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+}
+
+.ip-empty {
+  margin: 0;
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--color-text-light);
+  background: var(--color-white);
+  border: 1px dashed rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+.ip-source {
+  margin: var(--spacing-xs) 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-light);
+}
+
+/* Same look as .charter-note on the services pages */
+.ip-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  background: var(--color-white);
+  border: 1px solid var(--ip-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--border-radius);
+}
+.ip-note i {
+  margin-top: 2px;
+  color: var(--color-primary);
+}
+.ip-note p {
+  margin: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ---------- map markers & popups ---------- */
+
+.ip-pin {
+  width: 14px;
+  height: 14px;
+  background: var(--c);
+  border: 2px solid var(--color-white);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+.ip-cluster {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border: 3px solid color-mix(in srgb, var(--color-primary) 35%, #fff);
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+}
+.ip-popup {
+  font-family: var(--font-main);
+}
+.ip-popup h3 {
+  margin: 0 0 4px;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+.ip-popup dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+}
+.ip-popup dt {
+  color: var(--color-text-light);
+}
+.ip-popup dd {
+  margin: 0;
+}
+
+/* ---------- responsive (matches responsive.css breakpoints) ---------- */
+
+@media (max-width: 1024px) {
+  .ip-layout {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ip-layout {
+    grid-template-columns: 1fr;
+  }
+  .ip-filters {
+    position: static;
+  }
+  #map {
+    height: 65vh;
+    min-height: 360px;
+  }
+  .ip-table th:nth-child(3),
+  .ip-table td:nth-child(3) {
+    display: none;
+  }
+}

@@ -9,7 +9,7 @@ api.dpwh.bettergov.ph  ──(daily sync)──▶  data/projects.json  ──�
 ```
 
 - `scripts/sync.mjs` pulls every project for `province=Bukidnon` from the BetterGov DPWH API, the data behind Bisto.ph. That's 3 requests of 1,500 rows, about 4,200 projects. The script cleans the data and writes `data/projects.json`. It has no dependencies (Node 18+).
-- `index.html` + `assets/` is a static page. It doesn't call the API directly, because each API request takes 7–9 seconds.
+- `index.html` + `assets/` is a static page that uses the same design as betterbukidnon.org (see [Design](#design)). It doesn't call the API directly, because each API request takes 7–9 seconds.
 - `.github/workflows/sync.yml` runs the sync daily and commits only when project data changed. It does nothing until the repo is pushed to GitHub.
 
 ## Run locally
@@ -43,6 +43,29 @@ npm run serve   # http://localhost:8080 (python -m http.server)
 
 Project data comes from DPWH through [BetterGov.ph](https://bettergov.ph) / [Bisto.ph](https://bisto.ph). Map tiles are © OpenStreetMap contributors.
 
+## Design
+
+The page uses betterbukidnon.org's own styles, scripts and logos, copied from the main repo (`../betterbukidnon`), so it looks and behaves like the rest of the site. That includes the header, mobile menu, EN/FIL/CEB switcher, info bar and footer.
+
+| | Files |
+| --- | --- |
+| Shared, vendored, do not edit | `assets/css/{style,responsive,accessibility,footer}.css`, `assets/js/{main,info-bar,translations}.js`, `assets/images/**` |
+| This page | `assets/css/infra-projects.css`, `assets/js/infra-projects.js`, `assets/js/infra-projects-i18n.js` |
+
+```sh
+node scripts/sync-design.mjs --check   # does the main repo have newer design files?
+node scripts/sync-design.mjs           # copy them (records the source commit in design-sync.json)
+```
+
+When building UI:
+- Use the shared tokens (`--color-primary`, `--spacing-md`, …) and components (`.btn`, `.section`, `.card`, `.page-header`, …).
+- Prefix page classes with `ip-`.
+- Add every string to `infra-projects-i18n.js` in all three languages.
+
+`.claude/skills/design-system/SKILL.md` has the full list. Because the page code uses the same classes, tokens and translation engine as the main site, it can move into the betterbukidnon repo almost unchanged.
+
+The Filipino and Cebuano strings are first drafts and need a native-speaker review.
+
 ## Deploy (Cloudflare Workers)
 
 `wrangler.jsonc` serves `dist/` as Workers static assets, the same setup as betterbukidnon. There's no Worker script.
@@ -58,4 +81,4 @@ npm run deploy        # build + deploy (needs `npx wrangler login`)
 
 ## Claude Code
 
-`CLAUDE.md` has the project rules. Project skills are in `.claude/skills/`: `sync-projects`, `audit-data` and `deploy`. Subagents copied from betterbukidnon are in `.claude/agents/` (MIT, see `THIRD_PARTY_NOTICE.txt`).
+`CLAUDE.md` has the project rules. Project skills are in `.claude/skills/`: `sync-projects`, `audit-data`, `deploy`, `design-system` and `sync-design`. Subagents copied from betterbukidnon are in `.claude/agents/` (MIT, see `THIRD_PARTY_NOTICE.txt`).
