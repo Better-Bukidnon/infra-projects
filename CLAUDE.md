@@ -24,6 +24,16 @@ A static map and table of DPWH infrastructure projects in Bukidnon, sourced from
 - `assets/js/infra-projects.js` has a helper called `placeOf()`. Don't name a top-level helper `location`, because it shadows `window.location`.
 - The repo is public at github.com/Better-Bukidnon/infra-projects (`origin`). Push only when asked. Commits and PRs carry no Claude attribution lines.
 
+## Branches
+
+| Branch | Role |
+| --- | --- |
+| `develop` | **Default branch.** All work lands here first. |
+| `main` | **Production.** Cloudflare Workers Builds deploys it to infra.betterbukidnon.org. It only gets release merges from `develop`. |
+| `feature/*`, `fix/*`, `docs/*` | Short-lived. Branch from `develop` and merge back by pull request. |
+
+Never commit directly to `main`. The one exception is the daily sync workflow, which commits `data/projects.json` to `main` and then merges `main` into `develop`. With Preview builds on, every other branch gets a Cloudflare preview URL.
+
 ## Skills
 
 - `sync-projects`: refresh and sanity-check the data.
