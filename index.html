@@ -3,369 +3,216 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bukidnon Infrastructure Projects · Better Bukidnon</title>
     <meta
       name="description"
-      content="Map and list of DPWH public works and infrastructure projects in Bukidnon: roads, bridges, buildings, water and flood control, with budgets, contractors and status. Sourced from Bisto.ph."
+      content="Independent and unofficial. Every DPWH public works project in Bukidnon on Bisto.ph, on a map and in a table: roads, bridges, buildings, water and flood control, with budgets, contractors and status."
     />
-    <meta name="author" content="BetterBukidnon volunteers" />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://betterbukidnon.org/services/infrastructure-projects" />
+    <meta name="theme-color" content="#9a3412" />
+    <link rel="canonical" href="https://infra.betterbukidnon.org/" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Infrastructure Projects | BetterBukidnon.org" />
+    <meta property="og:site_name" content="Bukidnon Infrastructure Projects" />
+    <meta property="og:title" content="Bukidnon Infrastructure Projects · Better Bukidnon" />
     <meta
       property="og:description"
-      content="Map and list of DPWH infrastructure projects in Bukidnon, sourced from Bisto.ph."
+      content="Independent and unofficial. Every DPWH project in Bukidnon on Bisto.ph, on a map and in a table, with budgets, contractors and status."
     />
-    <meta property="og:image" content="https://betterbukidnon.org/assets/images/banners/opengraph.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://infra.betterbukidnon.org/" />
     <meta property="og:locale" content="en_PH" />
-    <meta property="og:site_name" content="BetterBukidnon.org" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
 
-    <title>Infrastructure Projects | BetterBukidnon.org</title>
-    <link rel="icon" type="image/svg+xml" href="assets/images/logo/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="assets/images/logo/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="preconnect" href="https://unpkg.com" />
+    <!-- Same type roles as budget.betterbukidnon.org: Figtree speaks, Inter works, mono labels. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-    />
-    <!-- Shared BetterBukidnon design (vendored, see design-sync.json; do not edit) -->
-    <link rel="stylesheet" href="assets/css/style.css" />
-    <link rel="stylesheet" href="assets/css/responsive.css" />
-    <link rel="stylesheet" href="assets/css/accessibility.css" />
-    <link rel="stylesheet" href="assets/css/footer.css" />
-    <!-- Page -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="assets/css/infra-projects.css" />
   </head>
 
   <body>
-    <a href="#main-content" class="skip-link" data-i18n="infra-skip-to-main-content"
-      >Skip to main content</a
-    >
+    <a href="#main-content" class="ip-skip" data-i18n="ip-skip">Skip to main content</a>
 
-    <!-- ============ Shared chrome (copied from betterbukidnon services pages) ============ -->
-    <div class="hotline-bar">
-      <div class="container">
-        <div class="hotline-inner">
-          <div class="hotline-items">
-            <a href="tel:911" class="hotline-item">
-              <i class="bi bi-telephone-fill" aria-hidden="true"></i>
-              <span>Emergency: 911</span>
-            </a>
-            <a href="tel:+63888131262" class="hotline-item">
-              <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
-              <span>PDRRMD: (088) 813-1262</span>
-            </a>
-            <a href="tel:+63888134263" class="hotline-item">
-              <i class="bi bi-shield-fill" aria-hidden="true"></i>
-              <span>Police: (088) 813-4263</span>
-            </a>
-            <a href="tel:+63888135449" class="hotline-item">
-              <i class="bi bi-fire" aria-hidden="true"></i>
-              <span>Fire: (088) 813-5449</span>
-            </a>
-            <a href="tel:+63888135631" class="hotline-item">
-              <i class="bi bi-heart-pulse-fill" aria-hidden="true"></i>
-              <span>PHO: (088) 813-5631</span>
-            </a>
-            <a href="tel:+63888135734" class="hotline-item">
-              <i class="bi bi-heart-fill" aria-hidden="true"></i>
-              <span>PSWDO: (088) 813-5734</span>
-            </a>
-          </div>
+    <header class="ip-masthead">
+      <div class="ip-masthead-top">
+        <div class="ip-page ip-masthead-top-inner">
+          <span class="ip-muted" id="today"></span>
+          <span class="ip-masthead-links">
+            <a href="https://betterbukidnon.org/" target="_blank" rel="noopener">Better Bukidnon <span aria-hidden="true">↗</span></a>
+            <a href="https://budget.betterbukidnon.org/" target="_blank" rel="noopener"
+              ><span data-i18n="ip-top-budget">Budget portal</span> <span aria-hidden="true">↗</span></a
+            >
+            <span class="ip-lang" role="group" aria-label="Language" data-i18n-aria="ip-lang-label">
+              <button type="button" data-lang="en" lang="en">EN</button>
+              <button type="button" data-lang="fil" lang="fil">FIL</button>
+              <button type="button" data-lang="ceb" lang="ceb">CEB</button>
+            </span>
+          </span>
         </div>
       </div>
-    </div>
-
-    <header class="site-header">
-      <div class="container header-inner">
-        <div class="logo-container">
-          <a href="https://betterbukidnon.org/"
-            ><img
-              src="assets/images/logo/better-bukidnon-logo.svg"
-              alt="Province of Bukidnon Logo"
-              class="logo-img"
-          /></a>
-        </div>
-        <nav class="main-nav" aria-label="Main Navigation">
-          <ul>
-            <li><a href="https://betterbukidnon.org/" data-i18n="nav-home">Home</a></li>
-            <li class="has-dropdown">
-              <a
-                href="https://betterbukidnon.org/services/"
-                class="active"
-                data-i18n="nav-services"
-                aria-haspopup="true"
-                aria-expanded="false"
-                >Services</a
-              >
-              <ul class="dropdown-menu">
-                <li><a href="https://betterbukidnon.org/services/certificates" data-i18n="infra-certificates">Certificates</a></li>
-                <li><a href="https://betterbukidnon.org/services/business" data-i18n="infra-business">Business</a></li>
-                <li><a href="https://betterbukidnon.org/services/tax-payments" data-i18n="infra-tax-payments">Tax Payments</a></li>
-                <li><a href="https://betterbukidnon.org/services/social-services" data-i18n="infra-social-services">Social Services</a></li>
-                <li><a href="https://betterbukidnon.org/services/health" data-i18n="infra-health">Health</a></li>
-                <li><a href="https://betterbukidnon.org/services/agriculture" data-i18n="infra-agriculture">Agriculture</a></li>
-                <li><a href="https://betterbukidnon.org/services/infrastructure" data-i18n="infra-infrastructure">Infrastructure</a></li>
-                <li><a href="https://betterbukidnon.org/services/education" data-i18n="infra-education">Education</a></li>
-                <li><a href="https://betterbukidnon.org/services/public-safety" data-i18n="infra-public-safety">Public Safety</a></li>
-                <li><a href="https://betterbukidnon.org/services/environment" data-i18n="infra-environment">Environment</a></li>
-              </ul>
-            </li>
-            <li><a href="https://betterbukidnon.org/government/" data-i18n="nav-government">Government</a></li>
-            <li><a href="https://betterbukidnon.org/statistics/" data-i18n="nav-statistics">Statistics</a></li>
-            <li class="has-dropdown">
-              <a
-                href="https://betterbukidnon.org/legislative/"
-                data-i18n="nav-legislative"
-                aria-haspopup="true"
-                aria-expanded="false"
-                >Legislative</a
-              >
-              <ul class="dropdown-menu">
-                <li><a href="https://betterbukidnon.org/legislative/ordinance-framework" data-i18n="infra-ordinance-framework">Ordinance Framework</a></li>
-                <li><a href="https://betterbukidnon.org/legislative/resolution-framework" data-i18n="infra-resolution-framework">Resolution Framework</a></li>
-              </ul>
-            </li>
-            <li><a href="https://betterbukidnon.org/budget/" data-i18n="nav-transparency">Transparency</a></li>
-            <li><a href="https://betterbukidnon.org/contact/" data-i18n="nav-contact">Contact</a></li>
-          </ul>
-        </nav>
-        <div class="header-actions">
-          <div class="lang-selector">
-            <button class="btn btn-secondary btn-sm lang-btn" data-lang="en">EN</button>
-            <button class="btn btn-secondary btn-sm lang-btn" data-lang="fil">FIL</button>
-            <button class="btn btn-secondary btn-sm lang-btn" data-lang="ceb">CEB</button>
-          </div>
-        </div>
+      <div class="ip-page ip-masthead-main">
+        <a href="./" class="ip-masthead-title">
+          <span class="ip-masthead-kicker" data-i18n="ip-kicker">Province of Bukidnon · Public works</span>
+          <span class="ip-masthead-name" data-i18n="ip-title">Infrastructure Projects</span>
+        </a>
+        <a class="ip-masthead-with" href="https://bisto.ph" target="_blank" rel="noopener">
+          <span class="ip-label" data-i18n="ip-data-from">Data from</span>
+          <span class="ip-masthead-source">Bisto.ph</span>
+          <span class="ip-masthead-via" data-i18n="ip-via">via BetterGov.ph</span>
+        </a>
       </div>
+      <nav class="ip-subnav" aria-label="Sections" data-i18n-aria="ip-nav-label">
+        <div class="ip-page ip-subnav-inner">
+          <a href="#map" data-view="map" data-i18n="ip-view-map">Map</a>
+          <a href="#table" data-view="table" data-i18n="ip-view-table">Table</a>
+          <a href="#about" data-i18n="ip-nav-about">About the data</a>
+        </div>
+      </nav>
     </header>
 
-    <div class="info-bar" role="complementary" aria-label="Real-time information">
-      <div class="container">
-        <div class="info-bar-inner">
-          <div class="info-bar-item info-bar-rates" aria-label="Exchange rates">
-            <i class="bi bi-currency-exchange"></i>
-            <span class="rate-rotator"><span class="rate-display">1 USD = ₱ --</span></span>
-          </div>
-          <div class="info-bar-item info-bar-weather" aria-label="Current weather in Bukidnon">
-            <i class="bi bi-thermometer-half"></i>
-            <span class="weather-location">Malaybalay</span>
-            <span class="weather-temp">--°C</span>
-          </div>
-          <div class="info-bar-item info-bar-datetime" aria-label="Philippine Date and Time">
-            <i class="bi bi-calendar3"></i>
-            <span class="date-value">--- --, ----</span>
-            <span class="datetime-separator">•</span>
-            <i class="bi bi-clock"></i>
-            <span class="time-value">--:-- --</span>
-            <span class="time-label">PHT</span>
-          </div>
+    <main id="main-content" class="ip-main">
+      <div class="ip-page">
+        <div class="ip-page-head">
+          <p class="ip-lede" data-i18n="ip-desc">
+            Every DPWH public works project in Bukidnon on Bisto.ph: roads, bridges, buildings,
+            water and flood control, with budgets, contractors and status.
+          </p>
         </div>
-      </div>
-    </div>
-    <!-- ============ /Shared chrome ============ -->
 
-    <main id="main-content">
-      <div class="container">
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="https://betterbukidnon.org/" data-i18n="infra-home">Home</a><span>/</span>
-          <a href="https://betterbukidnon.org/services/" data-i18n="infra-services">Services</a><span>/</span>
-          <a href="https://betterbukidnon.org/services/infrastructure" data-i18n="infra-bc">Infrastructure</a><span>/</span>
-          <span aria-current="page" data-i18n="ip-bc-projects">Projects</span>
-        </nav>
-      </div>
+        <dl class="ip-stats" aria-live="polite">
+          <div>
+            <dt class="ip-label" data-i18n="ip-stat-projects">Projects</dt>
+            <dd class="ip-stat" id="stat-count">…</dd>
+          </div>
+          <div>
+            <dt class="ip-label" data-i18n="ip-stat-mapped">On the map</dt>
+            <dd class="ip-stat" id="stat-mapped">…</dd>
+          </div>
+          <div>
+            <dt class="ip-label" data-i18n="ip-stat-budget">Total budget</dt>
+            <dd class="ip-stat ip-stat-accent" id="stat-budget">…</dd>
+          </div>
+          <div>
+            <dt class="ip-label" data-i18n="ip-status-Completed">Completed</dt>
+            <dd class="ip-stat" id="stat-completed">…</dd>
+          </div>
+        </dl>
 
-      <section class="page-header">
-        <div class="container">
-          <div class="page-header-content">
-            <span class="page-header-badge"
-              ><i class="bi bi-cone-striped" aria-hidden="true"></i>
-              <span data-i18n="ip-badge">Infrastructure</span></span
+        <div class="ip-layout">
+          <aside class="ip-filters" aria-label="Filters" data-i18n-aria="ip-filters">
+            <div class="ip-filter">
+              <label for="f-search" data-i18n="ip-search">Search projects</label>
+              <input id="f-search" type="search" placeholder="Name, contractor, contract ID…" data-i18n-placeholder="ip-search-ph" />
+            </div>
+            <div class="ip-filter">
+              <label for="f-lgu" data-i18n="ip-lgu">City / Municipality</label>
+              <select id="f-lgu"><option value="" data-i18n="ip-lgu-all">All of Bukidnon</option></select>
+            </div>
+            <div class="ip-filter">
+              <label for="f-year" data-i18n="ip-year">Infrastructure year</label>
+              <select id="f-year"><option value="" data-i18n="ip-year-all">All years</option></select>
+            </div>
+            <div class="ip-filter">
+              <label for="f-category" data-i18n="ip-category">Project category</label>
+              <select id="f-category"><option value="" data-i18n="ip-category-all">All categories</option></select>
+            </div>
+            <fieldset class="ip-filter">
+              <legend data-i18n="ip-status">Project status</legend>
+              <div id="f-status"></div>
+            </fieldset>
+            <button type="button" id="f-reset" class="ip-btn" data-i18n="ip-reset">Reset filters</button>
+            <a class="ip-btn ip-btn-primary" href="https://bisto.ph" target="_blank" rel="noopener noreferrer"
+              ><span data-i18n="ip-report">Report or monitor a project on Bisto.ph</span> <span aria-hidden="true">↗</span></a
             >
-            <h1 data-i18n="ip-title">Infrastructure Projects</h1>
-            <p class="page-header-desc" data-i18n="ip-desc">
-              Public works and infrastructure projects in Bukidnon, sourced from Bisto.ph.
+          </aside>
+
+          <div class="ip-results">
+            <div id="view-map" class="ip-panel">
+              <div id="ip-map" role="region" aria-label="Map of infrastructure projects" data-i18n-aria="ip-map-label"></div>
+            </div>
+
+            <div id="view-table" class="ip-panel" hidden>
+              <div class="ip-table-wrap">
+                <table class="ip-table">
+                  <thead>
+                    <tr>
+                      <th scope="col" data-i18n="ip-col-project">Project</th>
+                      <th scope="col" data-i18n="ip-col-location">Location</th>
+                      <th scope="col" data-i18n="ip-col-contractor">Contractor</th>
+                      <th scope="col" class="ip-num" data-i18n="ip-col-budget">Budget</th>
+                      <th scope="col" data-i18n="ip-col-status">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rows"></tbody>
+                </table>
+              </div>
+              <nav class="ip-pager" id="pager" aria-label="Pagination" data-i18n-aria="ip-pagination"></nav>
+            </div>
+
+            <p class="ip-empty" id="empty" hidden data-i18n="ip-empty">No projects match these filters.</p>
+            <p class="ip-source">
+              <span data-i18n="ip-source">Data sourced from Bisto.ph (DPWH projects via BetterGov.ph).</span>
+              <span id="synced"></span>
             </p>
           </div>
         </div>
-      </section>
 
-      <section class="section ip-section">
-        <div class="container">
-          <div class="ip-toolbar">
-            <div class="ip-view-toggle" role="tablist" aria-label="View">
-              <button type="button" role="tab" data-view="map" aria-selected="true">
-                <i class="bi bi-geo-alt-fill" aria-hidden="true"></i> <span data-i18n="ip-view-map">Map</span>
-              </button>
-              <button type="button" role="tab" data-view="table" aria-selected="false">
-                <i class="bi bi-table" aria-hidden="true"></i> <span data-i18n="ip-view-table">Table</span>
-              </button>
-            </div>
-            <div class="ip-summary" id="summary" aria-live="polite" data-i18n="ip-loading">Loading projects…</div>
-          </div>
-
-          <div class="ip-layout">
-            <aside class="ip-filters" aria-label="Filters">
-              <div class="ip-filter">
-                <label for="f-search"><i class="bi bi-search" aria-hidden="true"></i> <span data-i18n="ip-search">Search projects</span></label>
-                <input id="f-search" type="search" placeholder="Name, contractor, contract ID…" data-i18n-placeholder="ip-search-ph" />
-              </div>
-              <div class="ip-filter">
-                <label for="f-lgu"><i class="bi bi-pin-map" aria-hidden="true"></i> <span data-i18n="ip-lgu">City / Municipality</span></label>
-                <select id="f-lgu"><option value="" data-i18n="ip-lgu-all">All of Bukidnon</option></select>
-              </div>
-              <div class="ip-filter">
-                <label for="f-year"><i class="bi bi-calendar3" aria-hidden="true"></i> <span data-i18n="ip-year">Infrastructure year</span></label>
-                <select id="f-year"><option value="" data-i18n="ip-year-all">All years</option></select>
-              </div>
-              <div class="ip-filter">
-                <label for="f-category"><i class="bi bi-tag" aria-hidden="true"></i> <span data-i18n="ip-category">Project category</span></label>
-                <select id="f-category"><option value="" data-i18n="ip-category-all">All categories</option></select>
-              </div>
-              <fieldset class="ip-filter">
-                <legend><i class="bi bi-check2-square" aria-hidden="true"></i> <span data-i18n="ip-status">Project status</span></legend>
-                <div id="f-status"></div>
-              </fieldset>
-              <button type="button" id="f-reset" class="btn btn-secondary btn-sm btn-block">
-                <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> <span data-i18n="ip-reset">Reset filters</span>
-              </button>
-              <a class="btn btn-primary btn-sm btn-block" href="https://bisto.ph" target="_blank" rel="noopener noreferrer">
-                <span data-i18n="ip-report">Report or monitor a project on Bisto.ph</span> <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
-              </a>
-            </aside>
-
-            <div class="ip-results">
-              <div id="view-map" class="ip-panel">
-                <div id="map" role="region" aria-label="Map of infrastructure projects"></div>
-              </div>
-
-              <div id="view-table" class="ip-panel" hidden>
-                <div class="ip-table-wrap">
-                  <table class="ip-table">
-                    <thead>
-                      <tr>
-                        <th scope="col" data-i18n="ip-col-project">Project</th>
-                        <th scope="col" data-i18n="ip-col-location">Location</th>
-                        <th scope="col" data-i18n="ip-col-contractor">Contractor</th>
-                        <th scope="col" class="ip-num" data-i18n="ip-col-budget">Budget</th>
-                        <th scope="col" data-i18n="ip-col-status">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody id="rows"></tbody>
-                  </table>
-                </div>
-                <nav class="ip-pager" id="pager" aria-label="Pagination"></nav>
-              </div>
-
-              <p class="ip-empty" id="empty" hidden data-i18n="ip-empty">No projects match these filters.</p>
-              <p class="ip-source">
-                <span data-i18n="ip-source">Data sourced from Bisto.ph (DPWH projects via BetterGov.ph).</span>
-                <span id="synced"></span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section section-compact">
-        <div class="container">
-          <div class="ip-note" role="note">
-            <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
+        <section class="ip-about" id="about" aria-labelledby="about-h">
+          <h2 class="ip-section-h" id="about-h" data-i18n="ip-nav-about">About the data</h2>
+          <div class="ip-about-grid">
+            <p data-i18n="ip-about-sync">
+              The list is copied once a day from the BetterGov.ph DPWH API, the same data behind
+              Bisto.ph. Budgets, contractors and statuses are shown as published. The city or
+              municipality and the category are worked out from each project's description, and
+              pins that fall outside Bukidnon are left off the map.
+            </p>
             <p data-i18n="ip-note">
               Project data is published by DPWH and collected by Bisto.ph. Locations, budgets and
               progress may be out of date or wrong. To report a problem with a project, use Bisto.ph.
             </p>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
-    <!-- ============ Shared footer (copied from betterbukidnon services pages) ============ -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-main-new">
-          <div class="footer-brand">
-            <img src="assets/images/logo/better-bukidnon-logo-white.svg" alt="Better Bukidnon logo" class="footer-logo" />
-            <p class="footer-tagline" data-i18n="infra-empowering-the-people-of-bukidnon-with-transparent">
-              Empowering the people of Bukidnon with transparent access to the services, programs,
-              and public funds of LGU Bukidnon.
-            </p>
-            <div class="footer-social-new">
-              <a href="https://github.com/Better-Bukidnon/betterbukidnon" class="footer-social-btn" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="bi bi-github"></i></a>
-              <a href="mailto:volunteer@betterbukidnon.org" class="footer-social-btn" aria-label="Email the volunteers"><i class="bi bi-envelope-fill"></i></a>
-            </div>
-          </div>
-          <div class="footer-column">
-            <h4 data-i18n="infra-quick-links">Quick Links</h4>
-            <ul class="footer-links-new">
-              <li><a href="https://betterbukidnon.org/sitemap/" data-i18n="infra-sitemap">Sitemap</a></li>
-              <li><a href="https://bukidnon.gov.ph/" target="_blank" rel="noopener noreferrer" data-i18n="infra-citizens-charter">Citizen's Charter</a></li>
-              <li><a href="https://betterbukidnon.org/terms/" data-i18n="infra-terms-of-use">Terms of Use</a></li>
-              <li><a href="https://betterbukidnon.org/privacy/" data-i18n="infra-privacy-policy">Privacy Policy</a></li>
-              <li><a href="https://betterbukidnon.org/accessibility/" data-i18n="infra-accessibility">Accessibility</a></li>
-              <li><a href="https://betterbukidnon.org/faq/">FAQ</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <h4 data-i18n="infra-resources">Resources</h4>
-            <ul class="footer-links-new">
-              <li><a href="https://bisto.ph" target="_blank" rel="noopener noreferrer">Bisto.ph</a></li>
-              <li><a href="https://data.gov.ph" target="_blank" rel="noopener noreferrer" data-i18n="infra-open-data-philippines">Open Data Philippines</a></li>
-              <li><a href="https://www.foi.gov.ph/" target="_blank" rel="noopener noreferrer" data-i18n="infra-freedom-of-information">Freedom of Information</a></li>
-              <li><a href="https://bukidnon.gov.ph/" target="_blank" rel="noopener noreferrer" data-i18n="infra-official-lgu-bukidnon-portal">Official LGU Bukidnon Portal</a></li>
-              <li><a href="https://www.facebook.com/lgubukidnon" target="_blank" rel="noopener noreferrer" data-i18n="infra-lgu-bukidnon-facebook">LGU Bukidnon Facebook</a></li>
-            </ul>
-          </div>
-          <div class="footer-column">
-            <div class="footer-cost" role="status" aria-label="Cost to the People of Bukidnon: Zero Pesos">
-              Cost to the People of Bukidnon = <span class="footer-cost-value">₱0</span>
-            </div>
-            <a href="mailto:volunteer@betterbukidnon.org" class="footer-contribute"
-              ><i class="bi bi-envelope-heart"></i> <span data-i18n="infra-volunteer-with-us">Volunteer with us</span></a
-            >
-            <a href="https://github.com/Better-Bukidnon/betterbukidnon" class="footer-contribute" target="_blank" rel="noopener noreferrer"
-              ><i class="bi bi-github"></i> <span data-i18n="infra-contribute-code-with-us">Contribute code with us</span></a
-            >
-            <div class="footer-partners">
-              <a href="https://bettergov.ph" target="_blank" rel="noopener noreferrer" aria-label="BetterGov.ph"
-                ><img src="assets/images/logo/bettergov-footer.svg" alt="BetterGov.ph" class="footer-partner-logo" width="120" height="28" loading="lazy"
-              /></a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-bottom-new">
-          <div class="footer-copyright">
-            <span class="footer-copyright-text">&copy; 2026 BetterBukidnon.org</span>
-            <span class="footer-copyright-license">MIT | CC BY 4.0</span>
-            <span class="footer-copyright-disclaimer"
-              >Volunteer civic project, not an official government website. Built on the
-              BetterSolano template (MIT).</span
-            >
-          </div>
-        </div>
+    <footer class="ip-footer">
+      <div class="ip-page ip-footer-inner">
+        <p class="ip-footer-source">
+          <span data-i18n="ip-foot-source">Source: DPWH projects on Bisto.ph · via the BetterGov.ph DPWH API</span>
+          <span id="synced-foot"></span>
+        </p>
+        <ul class="ip-footer-links">
+          <li>
+            <span class="ip-label" data-i18n="ip-foot-site">This site</span>
+            <span><span data-i18n="ip-foot-run-by">Run by</span> <a href="https://betterbukidnon.org/" target="_blank" rel="noopener">Better Bukidnon ↗</a></span>
+          </li>
+          <li>
+            <span class="ip-label" data-i18n="ip-foot-also">Also from Better Bukidnon</span>
+            <a href="https://budget.betterbukidnon.org/" target="_blank" rel="noopener">budget.betterbukidnon.org ↗</a>
+          </li>
+          <li>
+            <span class="ip-label" data-i18n="ip-foot-report">Report a project</span>
+            <a href="https://bisto.ph" target="_blank" rel="noopener">bisto.ph ↗</a>
+          </li>
+          <li>
+            <span class="ip-label" data-i18n="ip-foot-help">Help out</span>
+            <a href="mailto:volunteer@betterbukidnon.org">volunteer@betterbukidnon.org</a>
+          </li>
+        </ul>
+        <p class="ip-footer-fine" data-i18n="ip-foot-disclaimer">
+          Volunteer civic project, not an official government website.
+        </p>
       </div>
     </footer>
-    <!-- ============ /Shared footer ============ -->
 
-    <!-- Shared site scripts (vendored) -->
-    <script defer src="assets/js/translations.js"></script>
     <script defer src="assets/js/infra-projects-i18n.js"></script>
-    <script defer src="assets/js/info-bar.js"></script>
-    <script defer src="assets/js/main.js"></script>
-    <!-- Page scripts -->
     <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script defer src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script defer src="assets/js/infra-projects.js"></script>

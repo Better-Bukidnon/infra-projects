@@ -1,7 +1,7 @@
 // Infrastructure Projects page: Leaflet map + paginated table over
 // data/projects.json, with search, municipality, year, category and status
-// filters. Text goes through the shared TranslationEngine (translations.js +
-// infra-projects-i18n.js), and the page re-renders when the language changes.
+// filters. Text goes through window.IPI18N (infra-projects-i18n.js), and the
+// page re-renders when the language changes.
 (function () {
   'use strict';
 
@@ -23,13 +23,14 @@
   // ---------- i18n ----------
 
   const LOCALES = { en: 'en-PH', fil: 'fil-PH', ceb: 'en-PH' };
-  const engine = () => window.TranslationEngine;
-  const lang = () => (engine() && engine().getCurrentLanguage()) || 'en';
+  const i18n = () => window.IPI18N;
+  const lang = () => (i18n() && i18n().lang()) || 'en';
   const locale = () => LOCALES[lang()] || 'en-PH';
 
   // Falls back to `fallback` (English) when the key or the engine is missing.
   function t(key, fallback, params) {
-    let s = (engine() && engine().getTranslation(key, lang())) || fallback || key;
+    if (i18n()) return i18n().t(key, fallback, params);
+    let s = fallback || key;
     if (params) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
     return s;
   }
@@ -38,6 +39,13 @@
   const peso = (n) =>
     new Intl.NumberFormat(locale(), { style: 'currency', currency: 'PHP', maximumFractionDigits: 0 }).format(n);
   const num = (n) => new Intl.NumberFormat(locale()).format(n);
+  const pesoShort = (n) =>
+    new Intl.NumberFormat(locale(), {
+      style: 'currency',
+      currency: 'PHP',
+      notation: 'compact',
+      maximumFractionDigits: 2,
+    }).format(n);
 
   function esc(s) {
     return String(s ?? '').replace(
@@ -89,6 +97,7 @@
       .map(
         (s) => `<label class="ip-status-opt">
           <input type="checkbox" value="${esc(s)}" ${first || checked.has(s) ? 'checked' : ''} />
+          <span class="ip-status-dot" style="--c:${statusColor(s)}"></span>
           <span>${esc(statusLabel(s))}</span><span class="ip-count" data-status="${esc(s)}"></span>
         </label>`,
       )
@@ -137,17 +146,17 @@
     const mapped = list.filter((p) => p.lat != null).length;
     const budget = list.reduce((sum, p) => sum + (p.budget || 0), 0);
 
-    // The summary is dynamic, so drop the static loading key.
-    $('summary').removeAttribute('data-i18n');
-    $('summary').innerHTML = t('ip-summary', '{count} projects · {mapped} mapped · {budget} total budget', {
-      count: `<strong>${num(list.length)}</strong>`,
-      mapped: num(mapped),
-      budget: peso(budget),
-    });
+    $('stat-count').textContent = num(list.length);
+    $('stat-mapped').textContent = num(mapped);
+    // The KPI is rounded to fit (₱63.05B); the exact sum is in its tooltip.
+    $('stat-budget').textContent = pesoShort(budget);
+    $('stat-budget').title = peso(budget);
+    $('stat-completed').textContent = num(list.filter((p) => p.status === 'Completed').length);
 
     if (state.syncedAt) {
       const when = state.syncedAt.toLocaleString(locale(), { dateStyle: 'medium', timeStyle: 'short' });
       $('synced').textContent = t('ip-synced', 'Last synced {when}.', { when });
+      $('synced-foot').textContent = ' · ' + $('synced').textContent;
     }
 
     $('empty').hidden = list.length > 0;
@@ -173,7 +182,7 @@
   }
 
   function initMap() {
-    state.map = L.map('map', { scrollWheelZoom: true }).setView(BUKIDNON_CENTER, 9);
+    state.map = L.map('ip-map', { scrollWheelZoom: true }).setView(BUKIDNON_CENTER, 9);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -257,11 +266,27 @@
 
   function setView(view) {
     state.view = view;
-    for (const b of document.querySelectorAll('.ip-view-toggle button')) {
-      b.setAttribute('aria-selected', String(b.dataset.view === view));
-    }
+    markView();
     if (window.location.hash.slice(1) !== view) history.replaceState(null, '', '#' + view);
     render();
+  }
+
+  // The subnav's Map and Table links act as tabs for the results panel.
+  function markView() {
+    for (const a of document.querySelectorAll('.ip-subnav a[data-view]')) {
+      if (a.dataset.view === state.view) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    }
+  }
+
+  function showToday() {
+    $('today').textContent = new Date().toLocaleDateString(locale(), {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'Asia/Manila',
+    });
   }
 
   function debounce(fn, ms) {
@@ -281,8 +306,13 @@
       for (const i of $('f-status').querySelectorAll('input')) i.checked = true;
       apply();
     });
-    for (const b of document.querySelectorAll('.ip-view-toggle button')) {
-      b.addEventListener('click', () => setView(b.dataset.view));
+    for (const a of document.querySelectorAll('.ip-subnav a[data-view]')) {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        setView(a.dataset.view);
+        const results = document.querySelector('.ip-layout');
+        if (results.getBoundingClientRect().top < 0) results.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      });
     }
     $('pager').addEventListener('click', (e) => {
       const b = e.target.closest('button[data-page]');
@@ -291,8 +321,9 @@
       renderTable();
       $('view-table').scrollIntoView({ block: 'start', behavior: 'smooth' });
     });
-    if (engine()) {
-      engine().addObserver(() => {
+    if (i18n()) {
+      i18n().onChange(() => {
+        showToday();
         if (!state.all.length) return;
         buildFilters();
         apply(true);
@@ -301,8 +332,7 @@
   }
 
   function showNoData(err) {
-    $('summary').removeAttribute('data-i18n');
-    $('summary').textContent = '';
+    for (const id of ['stat-count', 'stat-mapped', 'stat-budget', 'stat-completed']) $(id).textContent = '—';
     $('empty').setAttribute('data-i18n', 'ip-empty-nodata');
     $('empty').textContent = t(
       'ip-empty-nodata',
@@ -314,6 +344,9 @@
   }
 
   async function main() {
+    showToday();
+    state.view = window.location.hash.slice(1) === 'table' ? 'table' : 'map';
+    markView();
     wire();
     try {
       const res = await fetch(DATA_URL, { cache: 'no-cache' });
@@ -327,10 +360,6 @@
     if (!state.all.length) return showNoData();
 
     buildFilters();
-    state.view = window.location.hash.slice(1) === 'table' ? 'table' : 'map';
-    for (const b of document.querySelectorAll('.ip-view-toggle button')) {
-      b.setAttribute('aria-selected', String(b.dataset.view === state.view));
-    }
     apply();
   }
 

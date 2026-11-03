@@ -18,7 +18,7 @@ npm run serve         # plain static server on :8080, no build step
 
 1. If the data is stale, run the `sync-projects` skill first.
 2. `npm run deploy:dry`. It should read the files from `dist/` (index.html, assets, projects.json) and report "No bindings found".
-3. `npm run dev`, then open http://localhost:8787. Confirm the map renders, the summary shows the project count, and the browser console has no errors.
+3. `npm run dev`, then open http://localhost:8787. Confirm the map renders, the KPI row shows the project count, EN/FIL/CEB switch the text, and the browser console has no errors.
 
 ## Deploy
 
@@ -29,7 +29,7 @@ npx wrangler whoami   # if not logged in, ask the user to run: ! npx wrangler lo
 npm run deploy
 ```
 
-Report the URL that wrangler prints. Until a custom domain is set in `wrangler.jsonc` `routes`, that URL is `bukidnon-infra-projects.<account>.workers.dev`. Set custom domains in `wrangler.jsonc`, not in the dashboard, the same way betterbukidnon does.
+Report the URL that wrangler prints. Until the custom domain is turned on in `wrangler.jsonc` `routes`, that URL is `infra-projects-bukidnon.<account>.workers.dev`. The planned domain is `infra.betterbukidnon.org`, and it's already written in `wrangler.jsonc` as a commented-out route. Set custom domains in `wrangler.jsonc`, not in the dashboard, the same way the budget portal does. Turning the route on needs the user's go-ahead, and `betterbukidnon.org` must be a zone on the same Cloudflare account.
 
 ## Notes
 

@@ -77,7 +77,7 @@ async function fetchPage(page, attempt = 1) {
   const url = `${API}?page=${page}&limit=${PAGE_SIZE}&province=${encodeURIComponent(PROVINCE)}`;
   try {
     const res = await fetch(url, {
-      headers: { accept: 'application/json', 'user-agent': 'bukidnon-infra-projects-sync' },
+      headers: { accept: 'application/json', 'user-agent': 'infra-projects-bukidnon-sync' },
       signal: AbortSignal.timeout(60_000),
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);

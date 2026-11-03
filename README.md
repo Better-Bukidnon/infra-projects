@@ -1,6 +1,8 @@
 # Bukidnon Infrastructure Projects
 
-A map and table of DPWH public works and infrastructure projects in the Province of Bukidnon, sourced from [Bisto.ph](https://bisto.ph). Modeled on BetterGensan's [Infrastructure Projects page](https://bettergensan.org/city-map), and intended to feed https://betterbukidnon.org/services/infrastructure.
+A map and table of DPWH public works and infrastructure projects in the Province of Bukidnon, sourced from [Bisto.ph](https://bisto.ph). Modeled on BetterGensan's [Infrastructure Projects page](https://bettergensan.org/city-map).
+
+It's a standalone Better Bukidnon site, like the [budget portal](https://budget.betterbukidnon.org). It's planned for **infra.betterbukidnon.org**, and betterbukidnon.org/services/infrastructure links to it.
 
 ## How it works
 
@@ -9,7 +11,7 @@ api.dpwh.bettergov.ph  ──(daily sync)──▶  data/projects.json  ──�
 ```
 
 - `scripts/sync.mjs` pulls every project for `province=Bukidnon` from the BetterGov DPWH API, the data behind Bisto.ph. That's 3 requests of 1,500 rows, about 4,200 projects. The script cleans the data and writes `data/projects.json`. It has no dependencies (Node 18+).
-- `index.html` + `assets/` is a static page that uses the same design as betterbukidnon.org (see [Design](#design)). It doesn't call the API directly, because each API request takes 7–9 seconds.
+- `index.html` + `assets/` is a static site with its own identity (see [Design](#design)). It doesn't call the API directly, because each API request takes 7–9 seconds.
 - `.github/workflows/sync.yml` runs the sync daily and commits only when project data changed. It does nothing until the repo is pushed to GitHub.
 
 ## Run locally
@@ -45,24 +47,20 @@ Project data comes from DPWH through [BetterGov.ph](https://bettergov.ph) / [Bis
 
 ## Design
 
-The page uses betterbukidnon.org's own styles, scripts and logos, copied from the main repo (`../betterbukidnon`), so it looks and behaves like the rest of the site. That includes the header, mobile menu, EN/FIL/CEB switcher, info bar and footer.
+The site has its own identity, in the same family as budget.betterbukidnon.org:
+- the same type roles: Figtree for headings, Inter for body text, JetBrains Mono for labels
+- the same masthead, subnav band, KPI row and footer pattern
+- its own DPWH-orange accent, where the budget portal uses blue
+
+The masthead credits Bisto.ph. The top bar links to betterbukidnon.org and the budget portal, and the footer says it's run by Better Bukidnon.
 
 | | Files |
 | --- | --- |
-| Shared, vendored, do not edit | `assets/css/{style,responsive,accessibility,footer}.css`, `assets/js/{main,info-bar,translations}.js`, `assets/images/**` |
-| This page | `assets/css/infra-projects.css`, `assets/js/infra-projects.js`, `assets/js/infra-projects-i18n.js` |
+| Tokens and styles | `assets/css/infra-projects.css` |
+| Map, table and filters | `assets/js/infra-projects.js` |
+| Strings (EN/FIL/CEB) and the language switcher | `assets/js/infra-projects-i18n.js` |
 
-```sh
-node scripts/sync-design.mjs --check   # does the main repo have newer design files?
-node scripts/sync-design.mjs           # copy them (records the source commit in design-sync.json)
-```
-
-When building UI:
-- Use the shared tokens (`--color-primary`, `--spacing-md`, …) and components (`.btn`, `.section`, `.card`, `.page-header`, …).
-- Prefix page classes with `ip-`.
-- Add every string to `infra-projects-i18n.js` in all three languages.
-
-`.claude/skills/design-system/SKILL.md` has the full list. Because the page code uses the same classes, tokens and translation engine as the main site, it can move into the betterbukidnon repo almost unchanged.
+`.claude/skills/design-system/SKILL.md` has the tokens, components and rules.
 
 The Filipino and Cebuano strings are first drafts and need a native-speaker review.
 
@@ -81,4 +79,4 @@ npm run deploy        # build + deploy (needs `npx wrangler login`)
 
 ## Claude Code
 
-`CLAUDE.md` has the project rules. Project skills are in `.claude/skills/`: `sync-projects`, `audit-data`, `deploy`, `design-system` and `sync-design`. Subagents copied from betterbukidnon are in `.claude/agents/` (MIT, see `THIRD_PARTY_NOTICE.txt`).
+`CLAUDE.md` has the project rules. Project skills are in `.claude/skills/`: `sync-projects`, `audit-data`, `deploy` and `design-system`. Subagents copied from betterbukidnon are in `.claude/agents/` (MIT, see `THIRD_PARTY_NOTICE.txt`).

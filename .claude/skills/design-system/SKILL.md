@@ -1,69 +1,71 @@
 ---
 name: design-system
-description: How to build UI in this repo so it matches betterbukidnon.org - the shared tokens, components, page chrome, icons, i18n and naming rules. Use before adding or changing any markup, CSS or user-facing text on the Infrastructure Projects page.
+description: How to build UI in this repo - the site's own identity (infra.betterbukidnon.org, a Better Bukidnon site in the budget.betterbukidnon.org family), its tokens, components, i18n and naming rules. Use before adding or changing any markup, CSS or user-facing text.
 ---
 
-# BetterBukidnon design system (in this repo)
+# Design system (infra.betterbukidnon.org)
 
-The page uses the main site's real CSS and JS. They're vendored from `../betterbukidnon` and listed in `design-sync.json`. Build with what's already there before writing new CSS.
+This is a standalone Better Bukidnon site, like budget.betterbukidnon.org (`../bukidnon-transparency-portal`). It doesn't use betterbukidnon.org's header, nav, info bar or footer. It has its own masthead, subnav and footer, in the budget portal's style: white paper, ink rules, a colored section band and mono labels.
+
+What it shares with the budget portal:
+- The type roles: Figtree for headings, Inter for body text, JetBrains Mono for labels.
+- The layout family: masthead, subnav band, KPI row and footer.
+- The credit "run by Better Bukidnon".
+
+What sets it apart is its own accent, DPWH-orange, where the budget portal uses BetterGov blue.
 
 ## Files
 
-| Kind | File | Edit? |
-| --- | --- | --- |
-| Shared styles | `assets/css/style.css`, `responsive.css`, `accessibility.css`, `footer.css` | **No.** Vendored. Run the `sync-design` skill to update them. |
-| Shared JS | `assets/js/main.js` (nav, dropdowns, mobile menu), `info-bar.js` (rates, weather, clock), `translations.js` (TranslationEngine plus every site string) | **No.** Vendored. |
-| Logos | `assets/images/logo/*`, `assets/images/banners/opengraph.png` | **No.** Vendored. |
-| Page styles | `assets/css/infra-projects.css` | Yes |
-| Page JS | `assets/js/infra-projects.js` | Yes |
-| Page strings | `assets/js/infra-projects-i18n.js` | Yes |
+| Kind | File |
+| --- | --- |
+| Markup | `index.html` |
+| Tokens and styles | `assets/css/infra-projects.css` (tokens on `:root` at the top) |
+| Page JS | `assets/js/infra-projects.js` |
+| Strings and language switcher | `assets/js/infra-projects-i18n.js` (`window.IPI18N`) |
+| Favicon | `assets/images/favicon.svg` |
 
-If a vendored file has a bug, fix it in `../betterbukidnon` first, then re-sync.
+Nothing is vendored. You can edit every file.
 
-## Tokens (from `style.css` `:root`)
+## Tokens
 
-- Colors: `--color-primary #0032a0`, `--color-primary-dark`, `--color-secondary`, `--color-accent #f77f00`, `--color-success`, `--color-danger`, `--color-info`, `--color-bg`, `--color-bg-alt`, `--color-text`, `--color-text-light`, `--color-white`
-- Spacing: `--spacing-xs 8` · `sm 16` · `md 24` · `lg 32` · `xl 48`
-- Other: `--border-radius 8px`, `--shadow-sm`, `--shadow-md`, `--font-main` (Inter), `--max-width 1200px`
-- Page status colors are defined in `infra-projects.css`: `--ip-completed`, `--ip-ongoing`, `--ip-procurement`, `--ip-terminated`, `--ip-other`.
+- Paper and ink: `--paper`, `--paper-2`, `--paper-3`, `--rule`, `--rule-soft`, `--ink`, `--ink-2`, `--ink-3`, `--ink-mute`
+- Accent: `--accent #c2410c`, `--accent-deep #9a3412` (the subnav band and `theme-color`), `--accent-soft`
+- Status: `--ip-completed`, `--ip-ongoing`, `--ip-procurement`, `--ip-terminated`, `--ip-other`
+- Type: `--font-hero`, `--font-body`, `--font-mono`
+- Layout: `--page 1280px`, `--gutter` (32px, or 16px at 768px and below)
 
-Never hard-code a hex color that a token already covers.
+Never hard-code a color a token already covers. If the accent changes, also change it in `favicon.svg` and the `theme-color` meta.
 
-## Components already in style.css
+## Components
 
-- Layout: `.container`, `.section`, `.section-compact`, `.section-header`, `.section-title`, `.section-subtitle`, `.grid .grid-2/3/4`
-- Page top: `.breadcrumbs`, `.page-header` > `.page-header-content` > `.page-header-badge`, `h1`, `.page-header-desc`
-- Buttons: `.btn` + `.btn-primary` / `.btn-secondary` / `.btn-outline`, plus `.btn-sm` and `.btn-block`
-- Cards: `.card` (`.card-icon`, `.card-title`, `.card-text`, `.card-link`), `.info-card`, `.stat-card` in `.stat-cards-grid`
-- Data: `.data-table` inside `.table-responsive`, and `.badge .badge-success/-info/-warning`
-- Disclosure: `.accordion-item` > `.accordion-trigger` + `.accordion-content` (wired up by main.js)
-- Utilities: `.text-center`, `.text-muted`, `.text-primary`, `.text-right`
+- Chrome: `.ip-masthead` (with `-top`, `-main`, `-kicker`, `-name`, `-with`), `.ip-subnav`, `.ip-footer`
+- Page: `.ip-page` (the width container), `.ip-lede`, `.ip-stats` with `.ip-stat`, and `.ip-section-h`
+- Labels: `.ip-label` is for mono metadata only, never sentences
+- Controls: `.ip-btn`, `.ip-btn-primary`, `.ip-filter`, `.ip-pager`
+- Data: `.ip-table`, `.ip-badge` (a status dot and its label, colored with `--c`), and `.ip-sub`
 
-To see how the main site uses a component, grep `../betterbukidnon` for the class name.
+Corners are square. Separate sections with rules (`1px solid var(--ink)` on top) instead of cards or shadows.
 
 ## Rules for new code
 
-- **Prefix every page class with `ip-`.** style.css already defines `.badge`, `.btn-*` and others, and this page will eventually live inside the main repo.
-- Icons: use Bootstrap Icons 1.11.1 (`<i class="bi bi-…" aria-hidden="true"></i>`), already loaded from jsDelivr. Don't add another icon set.
-- Breakpoints: match `responsive.css`, which uses `1024px` (nav switches to the mobile menu) and `768px`.
-- Leaflet z-indexes go up to 1000, and `.site-header` is sticky at 1000. Keep any map container `isolation: isolate`.
-- The header, nav, info bar and footer in `index.html` are copied from `../betterbukidnon/services/*.html`, with links rewritten to `https://betterbukidnon.org/…`. When the main site's nav changes, update that block by hand. `sync-design` reports when it changes.
+- Prefix every class with `ip-`.
+- Don't use an icon font. Use text, and `↗` for external links.
+- Breakpoints are `1024px` and `768px`. A single-column grid must use `minmax(0, 1fr)`, or the table will push the page wider than a phone screen.
+- Keep the map container `isolation: isolate`. Leaflet's z-indexes go up to 1000.
+- Keep these visible: the Bisto.ph credit in the masthead, the source line, and "Last synced".
+- Keep the cross-links to betterbukidnon.org and budget.betterbukidnon.org.
 
 ## Text and translations
 
-- Every visible string needs a key in `assets/js/infra-projects-i18n.js` with `en`, `fil` and `ceb` values. Use `ip-` keys only.
-- Static markup: `data-i18n="ip-key"`, plus `data-i18n-placeholder`, `-title`, `-aria` and `-alt` for attributes. Keep the English text inline as the fallback.
-- Dynamic text in JS: `t('ip-key', 'English fallback', { param })`. `{param}` placeholders are interpolated. The page re-renders when the language changes (`TranslationEngine.addObserver`).
-- Option values and data stay in English. Only the labels translate.
-- FIL and CEB strings are drafts until a native speaker reviews them. Say so when you add new ones.
+- Every visible string needs an `ip-*` key in `infra-projects-i18n.js`, with `en`, `fil` and `ceb` values.
+- In static markup, use `data-i18n="ip-key"`, `data-i18n-placeholder` or `data-i18n-aria`. Keep the English text inline as the fallback.
+- In JS, use `t('ip-key', 'English fallback', { param })`. When the language changes, the page re-renders through `IPI18N.onChange`.
+- Option values and data stay in English. Only the labels are translated.
+- FIL and CEB strings are drafts until a native speaker reviews them. Say so whenever you add new ones.
 
 ## Checking your work
 
-Run `npm run serve`, then check at 1366px and 390px wide:
-- the EN, FIL and CEB buttons all work
-- there's no horizontal scroll at 390px
-- the console has no errors from page files
-
-These two console messages are expected when the page runs standalone:
-- the `sw.js` 404, because `main.js` registers the main site's service worker
-- the exchangerate.host 401 from `info-bar.js`
+Run `npm run serve`, then check the page at 1366px and at 390px wide. Headless Edge and Chrome can't go narrower than about 500px, so for the phone check, render the page inside a 390px `<iframe>`.
+- EN, FIL and CEB all switch the text.
+- There's no horizontal scroll at 390px.
+- The console shows no errors.
