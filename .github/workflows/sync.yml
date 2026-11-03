@@ -1,7 +1,7 @@
 name: Bisto.ph sync
 
 # Refreshes data/projects.json from the BetterGov DPWH API once a day and
-# commits it if anything changed. Inert until this repo is pushed to GitHub.
+# commits it if anything changed.
 
 on:
   schedule:

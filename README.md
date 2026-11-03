@@ -12,7 +12,7 @@ api.dpwh.bettergov.ph  ──(daily sync)──▶  data/projects.json  ──�
 
 - `scripts/sync.mjs` pulls every project for `province=Bukidnon` from the BetterGov DPWH API, the data behind Bisto.ph. That's 3 requests of 1,500 rows, about 4,200 projects. The script cleans the data and writes `data/projects.json`. It has no dependencies (Node 18+).
 - `index.html` + `assets/` is a static site with its own identity (see [Design](#design)). It doesn't call the API directly, because each API request takes 7–9 seconds.
-- `.github/workflows/sync.yml` runs the sync daily and commits only when project data changed. It does nothing until the repo is pushed to GitHub.
+- `.github/workflows/sync.yml` runs the sync daily and commits only when project data changed. It runs on GitHub at [Better-Bukidnon/infra-projects](https://github.com/Better-Bukidnon/infra-projects).
 
 ## Run locally
 

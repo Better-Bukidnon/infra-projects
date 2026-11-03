@@ -22,7 +22,7 @@ A static map and table of DPWH infrastructure projects in Bukidnon, sourced from
 - Keep Bisto.ph attribution and the "Last synced" line visible.
 - Keep the site's own identity: the budget portal's type roles and layout family, with this site's accent. It credits "Better Bukidnon" and links to betterbukidnon.org and the budget portal. Don't bring back the main site's header, nav or footer. Prefix classes with `ip-`. Every visible string needs an `ip-*` key in en, fil and ceb. See the `design-system` skill.
 - `assets/js/infra-projects.js` has a helper called `placeOf()`. Don't name a top-level helper `location`, because it shadows `window.location`.
-- The repo is local only for now. Don't add a remote or push unless asked.
+- The repo is public at github.com/Better-Bukidnon/infra-projects (`origin`). Push only when asked. Commits and PRs carry no Claude attribution lines.
 
 ## Skills
 
