@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Infrastructure Projects · Bukidnon</title>
+    <meta
+      name="description"
+      content="Public works and infrastructure projects in the Province of Bukidnon, sourced from Bisto.ph."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <div class="container">
+        <p class="eyebrow">Province of Bukidnon</p>
+        <h1>Infrastructure Projects</h1>
+        <p class="lede">
+          Public works and infrastructure projects in Bukidnon, sourced from
+          <a href="https://bisto.ph" target="_blank" rel="noopener noreferrer">Bisto.ph</a>.
+        </p>
+        <div class="view-toggle" role="tablist" aria-label="View">
+          <button type="button" role="tab" data-view="map" aria-selected="true">Map</button>
+          <button type="button" role="tab" data-view="table" aria-selected="false">Table</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container layout">
+      <aside class="filters" aria-label="Filters">
+        <div class="filter">
+          <label for="f-search">Search projects</label>
+          <input id="f-search" type="search" placeholder="Name, contractor, contract ID…" />
+        </div>
+        <div class="filter">
+          <label for="f-lgu">City / Municipality</label>
+          <select id="f-lgu"><option value="">All of Bukidnon</option></select>
+        </div>
+        <div class="filter">
+          <label for="f-year">Infrastructure year</label>
+          <select id="f-year"><option value="">All years</option></select>
+        </div>
+        <div class="filter">
+          <label for="f-category">Project category</label>
+          <select id="f-category"><option value="">All categories</option></select>
+        </div>
+        <fieldset class="filter">
+          <legend>Project status</legend>
+          <div id="f-status"></div>
+        </fieldset>
+        <button type="button" id="f-reset" class="btn-secondary">Reset filters</button>
+        <a class="btn-primary" href="https://bisto.ph" target="_blank" rel="noopener noreferrer">
+          Report or monitor a project on Bisto.ph ↗
+        </a>
+      </aside>
+
+      <section class="results" aria-live="polite">
+        <div class="summary" id="summary">Loading projects…</div>
+
+        <div id="view-map" class="panel">
+          <div id="map" role="region" aria-label="Map of infrastructure projects"></div>
+        </div>
+
+        <div id="view-table" class="panel" hidden>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Project</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Contractor</th>
+                  <th scope="col" class="num">Budget</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <nav class="pager" id="pager" aria-label="Pagination"></nav>
+        </div>
+
+        <p class="empty" id="empty" hidden>No projects match these filters.</p>
+        <p class="source" id="source">
+          Data sourced from <a href="https://bisto.ph" target="_blank" rel="noopener noreferrer">Bisto.ph</a>
+          (DPWH projects via BetterGov.ph).
+        </p>
+      </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
